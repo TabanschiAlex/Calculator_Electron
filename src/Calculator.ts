@@ -1,7 +1,7 @@
 class Calculator {
 
-    private memory: any = '';
-    private display = document.querySelector('#displayValue');
+    private memory: string = '';
+    private display: HTMLElement = document.querySelector('#displayValue');
 
     constructor() {
     }
@@ -11,54 +11,58 @@ class Calculator {
         return this.display.innerHTML = this.memory;
     }
 
-    public addNewValue(value: string): string {
-        return this.validate(value);
-    }
-
     public clearOneElement(): string {
-        if (this.memory.length === 1) {
-            this.memory = '';
-            return this.display.innerHTML = this.memory;
-        }
         this.memory = this.memory.slice(0, this.memory.length - 1);
-        return this.display.innerHTML = this.memory;
+        return this.showValueOnDisplay();
     }
 
     public clearAll(): string {
         this.memory = '';
-        return this.display.innerHTML = this.memory;
+        return this.showValueOnDisplay();
     }
 
-
-    public calculate(): string {
-        this.memory = eval(this.memory);
-
-        return this.display.innerHTML = this.memory;
-    }
-
-    private validate(value: string): string {
-        let operators: string = "+-*/."
-
-        if (this.memory === '') {
-            this.memory = value;
-            return this.display.innerHTML = this.memory;
+    public calculate(value: string): string {
+        if (value === '=') {
+            this.memory = eval(this.memory);
+            return this.showValueOnDisplay();
         }
 
-        for (let i : number = 0; i < operators.length; i++) {
-            const isOperator: boolean = value === operators[i];
-            for (let j: number = 0; j < operators.length; j++) {
-                if ((this.memory[this.memory.length - 1] === operators[j]) && isOperator) {
-                    this.memory.slice(0, this.memory.length - 1);
-                    this.memory += value;
-
-                    return this.display.innerHTML = this.memory;
-                }
-            }
+        if (this.validate(value) === true) {
+            this.memory += value;
+            return this.showValueOnDisplay();
         }
 
-        this.memory += value;
-        return this.display.innerHTML = this.memory
+        if (this.validate(value) === false) {
+            return this.showValueOnDisplay();
+        }
     }
+
+    private validate(value: string): boolean {
+        const operators: string[] = ['+', '-', '*', '/'];
+
+        if (!this.memory) {
+            if (operators.indexOf(value) != -1 || value === '.') {
+                return false;
+            };
+
+            return true;
+        }
+
+        if (operators.indexOf(this.memory.slice(-1)) != -1 && operators.indexOf(value) != -1) {
+            this.memory = this.memory.slice(0, this.memory.length - 1);
+            return true;
+        }
+
+        if (value === '.' && this.memory.slice(operators.indexOf(this.memory) + 1).indexOf('.') === -1)  {
+            this.memory = this.memory.slice(operators.indexOf(this.memory) + 1);
+            console.log(this.memory)
+            return true;
+        }
+
+        return true;
+    }
+
+
 }
 
 const calculator = new Calculator();

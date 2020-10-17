@@ -6,43 +6,46 @@ var Calculator = /** @class */ (function () {
     Calculator.prototype.showValueOnDisplay = function () {
         return this.display.innerHTML = this.memory;
     };
-    Calculator.prototype.addNewValue = function (value) {
-        return this.validate(value);
-    };
     Calculator.prototype.clearOneElement = function () {
-        if (this.memory.length === 1) {
-            this.memory = '';
-            return this.display.innerHTML = this.memory;
-        }
         this.memory = this.memory.slice(0, this.memory.length - 1);
-        return this.display.innerHTML = this.memory;
+        return this.showValueOnDisplay();
     };
     Calculator.prototype.clearAll = function () {
         this.memory = '';
-        return this.display.innerHTML = this.memory;
+        return this.showValueOnDisplay();
     };
-    Calculator.prototype.calculate = function () {
-        this.memory = eval(this.memory);
-        return this.display.innerHTML = this.memory;
+    Calculator.prototype.calculate = function (value) {
+        if (value === '=') {
+            this.memory = eval(this.memory);
+            return this.showValueOnDisplay();
+        }
+        if (this.validate(value) === true) {
+            this.memory += value;
+            return this.showValueOnDisplay();
+        }
+        if (this.validate(value) === false) {
+            return this.showValueOnDisplay();
+        }
     };
     Calculator.prototype.validate = function (value) {
-        var operators = "+-*/.";
-        if (this.memory === '') {
-            this.memory = value;
-            return this.display.innerHTML = this.memory;
-        }
-        for (var i = 0; i < operators.length; i++) {
-            var isOperator = value === operators[i];
-            for (var j = 0; j < operators.length; j++) {
-                if ((this.memory[this.memory.length - 1] === operators[j]) && isOperator) {
-                    this.memory.slice(0, this.memory.length - 1);
-                    this.memory += value;
-                    return this.display.innerHTML = this.memory;
-                }
+        var operators = ['+', '-', '*', '/'];
+        if (!this.memory) {
+            if (operators.indexOf(value) != -1 || value === '.') {
+                return false;
             }
+            ;
+            return true;
         }
-        this.memory += value;
-        return this.display.innerHTML = this.memory;
+        if (operators.indexOf(this.memory.slice(-1)) != -1 && operators.indexOf(value) != -1) {
+            this.memory = this.memory.slice(0, this.memory.length - 1);
+            return true;
+        }
+        if (value === '.' && this.memory.slice(operators.indexOf(this.memory) + 1).indexOf('.') === -1) {
+            this.memory = this.memory.slice(operators.indexOf(this.memory) + 1);
+            console.log(this.memory);
+            return true;
+        }
+        return true;
     };
     return Calculator;
 }());
