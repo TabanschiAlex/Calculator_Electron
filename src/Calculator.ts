@@ -51,7 +51,6 @@ class Calculator {
 
     private validate(value: string): boolean {
         const operators: string[] = ['+', '-', '*', '/'];
-        let lastOperator: string;
 
         if (value === '=') {
             return false;
@@ -67,11 +66,22 @@ class Calculator {
 
         if (operators.indexOf(this.memory.slice(-1)) != -1 && operators.indexOf(value) != -1) {
             this.memory = this.memory.slice(0, this.memory.length - 1);
+
             return true;
         }
 
+        if (this.memory[this.memory.length - 1] === '.' && operators.indexOf(value) != -1) {
+            this.memory = this.memory.slice(0, this.memory.length - 1);
+
+            return true;
+        }
+
+        if (operators.indexOf(this.memory[this.memory.length - 1]) != -1 && value === '.') {
+            return false;
+        }
+
         if (value === '.') {
-            lastOperator = this.memory;
+            let lastOperator: string = this.memory;
 
             for (let i: number = 0; i < operators.length; i++) {
                 lastOperator = lastOperator.slice(lastOperator.lastIndexOf(operators[i]) + 1);

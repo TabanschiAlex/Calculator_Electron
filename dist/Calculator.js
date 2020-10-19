@@ -37,7 +37,6 @@ var Calculator = /** @class */ (function () {
     };
     Calculator.prototype.validate = function (value) {
         var operators = ['+', '-', '*', '/'];
-        var lastOperator;
         if (value === '=') {
             return false;
         }
@@ -51,8 +50,15 @@ var Calculator = /** @class */ (function () {
             this.memory = this.memory.slice(0, this.memory.length - 1);
             return true;
         }
+        if (this.memory[this.memory.length - 1] === '.' && operators.indexOf(value) != -1) {
+            this.memory = this.memory.slice(0, this.memory.length - 1);
+            return true;
+        }
+        if (operators.indexOf(this.memory[this.memory.length - 1]) != -1 && value === '.') {
+            return false;
+        }
         if (value === '.') {
-            lastOperator = this.memory;
+            var lastOperator = this.memory;
             for (var i = 0; i < operators.length; i++) {
                 lastOperator = lastOperator.slice(lastOperator.lastIndexOf(operators[i]) + 1);
             }
