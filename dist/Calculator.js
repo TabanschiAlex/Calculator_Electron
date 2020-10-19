@@ -33,10 +33,10 @@ var Calculator = /** @class */ (function () {
     Calculator.prototype.calculate = function (value) {
         this.checkFontSize();
         if (value === '=') {
-            if (eval(this.memory) != Infinity) {
-                this.memory = eval(this.memory).toString();
+            if (eval(this.memory) === Infinity) {
+                return this.showValueOnDisplay('Делить на нуль нельзя!');
             }
-            return this.showValueOnDisplay('Делить на нуль нельзя!');
+            this.memory = eval(this.memory).toString();
         }
         if (this.validate(value) === true) {
             this.memory += value;

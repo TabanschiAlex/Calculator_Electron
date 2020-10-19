@@ -11,6 +11,8 @@ var createWindow = function () {
     var mainWindow = new electron_1.BrowserWindow({
         height: 750,
         width: 500,
+        maxHeight: 750,
+        maxWidth: 500,
         minHeight: 750,
         minWidth: 500
     });
