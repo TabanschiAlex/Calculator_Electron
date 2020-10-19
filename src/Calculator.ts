@@ -7,17 +7,25 @@ class Calculator {
     }
 
 
-    public showValueOnDisplay(): string {
+    public showValueOnDisplay(message?: string): string {
+        if (message) {
+            alert(message);
+        }
+
         return this.display.innerHTML = this.memory;
     }
 
     public clearOneElement(): string {
         this.memory = this.memory.slice(0, this.memory.length - 1);
+        this.checkFontSize();
+
         return this.showValueOnDisplay();
     }
 
     public clearAll(): string {
         this.memory = '';
+        this.checkFontSize();
+
         return this.showValueOnDisplay();
     }
 
@@ -30,7 +38,7 @@ class Calculator {
             this.display.style.fontSize = '40px';
         }
 
-        if (this.memory.length > 25) {
+        if (this.memory.length > 22) {
             this.display.style.fontSize = '20px';
         }
     }
@@ -39,7 +47,11 @@ class Calculator {
         this.checkFontSize();
 
         if (value === '=') {
-            this.memory = eval(this.memory).toString();
+            if (eval(this.memory) != Infinity) {
+                this.memory = eval(this.memory).toString();
+            }
+
+            return this.showValueOnDisplay('Делить на нуль нельзя!');
         }
 
         if (this.validate(value) === true) {

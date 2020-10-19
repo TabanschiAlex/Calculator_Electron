@@ -11,15 +11,13 @@ var createWindow = function () {
     var mainWindow = new electron_1.BrowserWindow({
         height: 750,
         width: 500,
-        maxHeight: 750,
-        maxWidth: 500,
         minHeight: 750,
         minWidth: 500
     });
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, '../src/index.html'));
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 };
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

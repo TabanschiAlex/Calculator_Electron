@@ -3,15 +3,20 @@ var Calculator = /** @class */ (function () {
         this.memory = '';
         this.display = document.querySelector('#displayValue');
     }
-    Calculator.prototype.showValueOnDisplay = function () {
+    Calculator.prototype.showValueOnDisplay = function (message) {
+        if (message) {
+            alert(message);
+        }
         return this.display.innerHTML = this.memory;
     };
     Calculator.prototype.clearOneElement = function () {
         this.memory = this.memory.slice(0, this.memory.length - 1);
+        this.checkFontSize();
         return this.showValueOnDisplay();
     };
     Calculator.prototype.clearAll = function () {
         this.memory = '';
+        this.checkFontSize();
         return this.showValueOnDisplay();
     };
     Calculator.prototype.checkFontSize = function () {
@@ -21,14 +26,17 @@ var Calculator = /** @class */ (function () {
         if (this.memory.length >= 10) {
             this.display.style.fontSize = '40px';
         }
-        if (this.memory.length > 25) {
+        if (this.memory.length > 22) {
             this.display.style.fontSize = '20px';
         }
     };
     Calculator.prototype.calculate = function (value) {
         this.checkFontSize();
         if (value === '=') {
-            this.memory = eval(this.memory).toString();
+            if (eval(this.memory) != Infinity) {
+                this.memory = eval(this.memory).toString();
+            }
+            return this.showValueOnDisplay('Делить на нуль нельзя!');
         }
         if (this.validate(value) === true) {
             this.memory += value;
